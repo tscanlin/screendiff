@@ -1,0 +1,28 @@
+{
+  "name": "screendiff",
+  "version": "1.0.0",
+  "description": "Screenshot diffing tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tscanlin/screendiff.git"
+  },
+  "keywords": [
+    "screenshot",
+    "diff",
+    "diffing",
+    "screendiff"
+  ],
+  "author": "Tim Scanlin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tscanlin/screendiff/issues"
+  },
+  "homepage": "https://github.com/tscanlin/screendiff#readme",
+  "dependencies": {
+    "node-resemble-js": "^0.2.0"
+  }
+}

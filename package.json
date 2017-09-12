@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/tscanlin/screendiff#readme",
   "dependencies": {
-    "node-resemble-js": "^0.2.0"
+    "node-resemble-js": "^0.2.0",
+    "yargs": "^8.0.2"
   }
 }

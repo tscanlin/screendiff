@@ -1,0 +1,14 @@
+{
+  "description": "Api schema",
+  "type": "object",
+  "properties": {
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number",
+      "description": ""
+    }
+  },
+  "required": []
+}

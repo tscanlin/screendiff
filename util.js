@@ -1,4 +1,4 @@
-const schema = require('./apiSchema.json')
+const schema = require('./schema.json')
 
 function getDefaults(config) {
   if (!schema.properties || !config) {
@@ -6,10 +6,10 @@ function getDefaults(config) {
   }
 
   Object.keys(schema.properties).forEach((prop) => {
-    console.log(prop);
     config[prop] = config[prop] || schema.properties[prop].default
   })
 
   return config
 }
+
 exports.getDefaults = getDefaults

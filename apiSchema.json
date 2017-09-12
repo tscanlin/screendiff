@@ -2,13 +2,20 @@
   "description": "Api schema",
   "type": "object",
   "properties": {
-    "latitude": {
-      "type": "number"
+    "original": {
+      "type": "string",
+      "default": "screenshots/original",
+      "required": true
     },
-    "longitude": {
-      "type": "number",
-      "description": ""
+    "new": {
+      "type": "string",
+      "default": "screenshots/new",
+      "required": true
+    },
+    "diff": {
+      "type": "string",
+      "default": "screenshots/diff",
+      "required": true
     }
-  },
-  "required": []
+  }
 }

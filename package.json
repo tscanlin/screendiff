@@ -25,5 +25,9 @@
   "dependencies": {
     "node-resemble-js": "^0.2.0",
     "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "globby": "^6.1.0",
+    "jest": "^21.0.2"
   }
 }

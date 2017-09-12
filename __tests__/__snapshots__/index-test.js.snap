@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`util.getDefaults 1`] = `
+Object {
+  "diff": "screenshots/diff",
+  "new": "screenshots/new",
+  "original": "screenshots/original",
+}
+`;

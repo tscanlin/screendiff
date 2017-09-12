@@ -6,5 +6,6 @@ Object {
   "forceDiff": false,
   "newDir": "screenshots/new",
   "originalDir": "screenshots/original",
+  "verboseOutput": true,
 }
 `;

@@ -37,7 +37,7 @@ function previewTemplate (props) {
       }
       return `<div><a href="#${getScreenshotName(file)}">${makeIcon({ good: props2.verboseOutput[file].misMatchPercentage === '0.00' })}${getScreenshotName(file)}</a></div>`
     }).join('')}`
-    const summary = `<h3>Screendiff Tests: ${failCount} failed, ${passCount} passed, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre><br />`
+    const summary = `<h3>Screendiff Tests: <span class="red">${failCount} failed</span>, <span class="green">${passCount} passed</span>, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre><br />`
 
     return html + summary
   }

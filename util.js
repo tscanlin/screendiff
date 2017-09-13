@@ -1,6 +1,6 @@
 const schema = require('./schema.json')
 
-function getDefaults(config) {
+function getDefaults (config) {
   if (!schema.properties || !config) {
     throw new Error('Pass a valid schema and config')
   }

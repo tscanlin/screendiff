@@ -1,7 +1,5 @@
 const path = require('path')
 
-
-
 function previewTemplate (props) {
   function getScreenshotName (file) {
     return file.split(`${props.config.originalDir}/`).join('')
@@ -23,12 +21,12 @@ function previewTemplate (props) {
   `
   }
 
-  function makeTocSummary(props2) {
+  function makeTocSummary (props2) {
     let failCount = 0
     let passCount = 0
     let verboseOutput = []
     let html = `${props2.files.map((file) => {
-      console.log(file);
+      console.log(file)
       if (props2.verboseOutput[file].misMatchPercentage !== '0.00') {
         failCount++
         verboseOutput.push(props2.verboseOutput[file])
@@ -100,7 +98,7 @@ function previewTemplate (props) {
         pwd: props.pwd,
         files: props.files,
         config: props.config,
-        verboseOutput: props.verboseOutput,
+        verboseOutput: props.verboseOutput
       })}
     </div>
     <br />
@@ -113,7 +111,7 @@ function previewTemplate (props) {
           pwd: props.pwd,
           file,
           config: props.config,
-          verboseOutput: props.verboseOutput,
+          verboseOutput: props.verboseOutput
         }
       }).map(makeRow).join('')}
     </div>
@@ -123,5 +121,5 @@ function previewTemplate (props) {
 }
 
 module.exports = {
-  previewTemplate: previewTemplate,
+  previewTemplate: previewTemplate
 }

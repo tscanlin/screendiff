@@ -4,6 +4,7 @@
   "description": "Screenshot diffing tool",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
     "test": "jest"
   },
   "repository": {
@@ -28,6 +29,12 @@
   },
   "devDependencies": {
     "globby": "^6.1.0",
-    "jest": "^21.0.2"
+    "jest": "^21.0.2",
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "env": {
+      "jest": true
+    }
   }
 }

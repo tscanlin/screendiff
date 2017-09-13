@@ -1,8 +1,6 @@
-const path = require('path')
 const globby = require('globby')
 const resemble = require('node-resemble-js')
 const fs = require('fs')
-const PNG = require('pngjs').PNG
 const spawn = require('child_process').spawnSync
 const PWD = process.env.PWD || process.cwd()
 
@@ -26,12 +24,10 @@ function copyToOriginal () {
   spawn('cp', ['-R', `${config.newDir}/${ALL_PNGS}`, config.originalDir])
 }
 
-
-
 function diffFiles (file1, file2, diffFile) {
   return resemble(file1).compareTo(file2).onComplete(function (diffData) {
     if (diffData.misMatchPercentage !== '0.00' || config.forceDiff) {
-      const diffImg = diffData.getDiffImage().pack().pipe(fs.createWriteStream(diffFile))
+      diffData.getDiffImage().pack().pipe(fs.createWriteStream(diffFile))
     }
 
     // Write summary json file.
@@ -47,7 +43,7 @@ function diffFiles (file1, file2, diffFile) {
   })
 }
 
-function generateDiffs() {
+function generateDiffs () {
   // Make the directory in case it doesn't exist.
   spawn('mkdir', [config.diffDir])
 
@@ -55,6 +51,7 @@ function generateDiffs() {
     screenshots.forEach((file1) => {
       // Read source
       fs.readFile(file1, (err, data) => {
+        if (err) throw err
         const file2 = file1.replace(config.originalDir, config.newDir)
         const diffFile = file1.replace(config.originalDir, config.diffDir)
         return diffFiles(file1, file2, diffFile)
@@ -67,7 +64,7 @@ function generateDiffs() {
   // })
 }
 
-function getScreenshots(dir) {
+function getScreenshots (dir) {
   return globby(`${dir}/${ALL_PNGS}`)
 }
 
@@ -98,7 +95,7 @@ function validateJson () {
   })
 }
 
-function generatePreview() {
+function generatePreview () {
   getScreenshots(config.originalDir).then((files) => {
     const verboseOutput = {}
     files.forEach((file) => {
@@ -110,7 +107,7 @@ function generatePreview() {
       files,
       verboseOutput,
       pwd: PWD,
-      config,
+      config
     })
 
     fs.writeFile(`${config.diffDir}/diff-preview.html`, html, 'utf-8', (err, data) => {
@@ -121,68 +118,10 @@ function generatePreview() {
   })
 }
 
-
 module.exports = {
   copyToOriginal: copyToOriginal,
   diffFiles: diffFiles,
   generateDiffs: generateDiffs,
   generatePreview: generatePreview,
-  validateJson: validateJson,
+  validateJson: validateJson
 }
-
-// const pargs = process.argv
-// const diffDir = './test/screenshots-diff/'
-//
-// const srcImgs = pargs[2]
-// const compareImgs = pargs[3]
-//
-// function removePattern (str) {
-//   return str.split('*.png').join('')
-// }
-//
-// function renameExt (str, ext1, ext2) {
-//   return str.split(ext1).join(ext2)
-// }
-//
-// globby(srcImgs).then((files) => {
-//   files.forEach((file1) => {
-//     // Read source
-//     fs.readFile(file1, (err, data) => {
-//       // Read new
-//       const srcPng = PNG.sync.read(data)
-//       const file2 = file1.replace(removePattern(srcImgs), removePattern(compareImgs))
-//       const diffFile = file1.replace(removePattern(srcImgs), diffDir)
-//       console.log(diffFile)
-//       fs.readFile(file2, (err2, data2) => {
-//         resemble(file1).compareTo(file2).onComplete(function (diffData) {
-//           console.log(diffData)
-//           if (diffData.misMatchPercentage === '0.00') {
-//             // console.log(`PASS: ${file1} matched ${file2}`)
-//           } else {
-//             // console.log(`FAIL: ${file1} did not match ${file2}`)
-//             const diffImg = diffData.getDiffImage().pack().pipe(fs.createWriteStream(diffFile))
-//
-//             // Write summary file.
-//             fs.writeFile(renameExt(diffFile, '.png', '.json'), JSON.stringify({
-//               diffFile: diffFile,
-//               isSameDimensions: diffData.isSameDimensions,
-//               dimensionDifference: diffData.dimensionDifference,
-//               misMatchPercentage: diffData.misMatchPercentage,
-//               analysisTime: diffData.analysisTime
-//             }), 'utf-8', (err, data) => {
-//               console.log(err, data)
-//             })
-//           }
-//         })
-//         // var diff = new PNG({width: srcPng.width, height: srcPng.height});
-//         // pixelmatch(data, data2, diff.data, srcPng.width, srcPng.height)
-//         // console.log(diff.data);
-//         // diff.pack().pipe(fs.createWriteStream(diffFile));
-//       })
-//     })
-//   })
-// }).catch((e) => {
-//   console.log(e)
-// })
-//
-// // pixelmatch(img1, img2, diff, 800, 600, {threshold: 0.1})

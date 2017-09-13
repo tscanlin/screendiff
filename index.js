@@ -31,15 +31,13 @@ function diffFiles (file1, file2, diffFile) {
     }
 
     // Write summary json file.
-    fs.writeFile(diffFile.split('.png').join('.json'), JSON.stringify({
+    fs.writeFileSync(diffFile.split('.png').join('.json'), JSON.stringify({
       diffFile: diffFile,
       isSameDimensions: diffData.isSameDimensions,
       dimensionDifference: diffData.dimensionDifference,
       misMatchPercentage: diffData.misMatchPercentage,
       analysisTime: diffData.analysisTime
-    }), (err, data) => {
-      console.log(err, data)
-    })
+    }))
   })
 }
 
@@ -110,9 +108,8 @@ function generatePreview () {
       config
     })
 
-    fs.writeFile(`${config.diffDir}/diff-preview.html`, html, 'utf-8', (err, data) => {
-      console.log(err, data)
-    })
+    const previewFile = `${config.diffDir}/diff-preview.html`
+    fs.writeFileSync(previewFile, html, 'utf-8')
   }).catch((e) => {
     console.log(e)
   })

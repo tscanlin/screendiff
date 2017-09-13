@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
+    "pretest": "yarn lint",
     "test": "jest"
   },
   "repository": {

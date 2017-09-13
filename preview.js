@@ -11,12 +11,24 @@ function previewTemplate (props) {
   }
 
   function makeRow (props2) {
+    const originalFile = `file://${path.join(props2.pwd, props2.file)}`
+    const newFile = `file://${path.join(props2.pwd, props2.file.replace(props2.config.originalDir, props2.config.newDir))}`
+    const diffFile = `file://${path.join(props2.pwd, props2.file.replace(props2.config.originalDir, props2.config.diffDir))}`
+
     return `
-  <div class="">
+  <div>
     <h4 id="${getScreenshotName(props2.file)}">${makeIcon({ good: props2.verboseOutput[props2.file].misMatchPercentage === '0.00' })}${getScreenshotName(props2.file)}</h4>
-    <img class="screenshot w-30 src" src="file://${path.join(props2.pwd, props2.file)}" />
-    <img class="screenshot w-30 new" src="file://${path.join(props2.pwd, props2.file.replace(props2.config.originalDir, props2.config.newDir))}" />
-    <img class="screenshot w-30 diff" src="file://${path.join(props2.pwd, props2.file.replace(props2.config.originalDir, props2.config.diffDir))}" />
+    <div class="df w-100">
+      <a href="${originalFile}" class="screenshot flex-1 pa2">
+        <img class="original" src="${originalFile}" />
+      </a>
+      <a href="${newFile}" class="screenshot flex-1 pa2">
+        <img class="new" src="${newFile}" />
+      </a>
+      <a href="${diffFile}" class="screenshot flex-1 pa2">
+        <img class="diff" src="${diffFile}" />
+      </a>
+    </div>
   </div>
   `
   }
@@ -35,9 +47,9 @@ function previewTemplate (props) {
       }
       return `<div><a href="#${getScreenshotName(file)}">${makeIcon({ good: props2.verboseOutput[file].misMatchPercentage === '0.00' })}${getScreenshotName(file)}</a></div>`
     }).join('')}`
-    const summary = `<h3>Screendiff Tests: <span class="red">${failCount} failed</span>, <span class="green">${passCount} passed</span>, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre><br />`
+    const summary = `<h3>Screendiff Tests: <span class="red">${failCount} failed</span>, <span class="green">${passCount} passed</span>, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre>`
 
-    return html + summary
+    return summary + html
   }
 
   return `
@@ -45,18 +57,21 @@ function previewTemplate (props) {
   <head>
     <title>screendiff preview</title>
     <style>
-      html {
-        font-family: sans-serif;
-      }
-      a {
-        text-decoration: none;
-      }
+      html { font-family: sans-serif; background-color: #fafcfd; margin-bottom: 50vh; }
+      a { text-decoration: none; }
+      img { max-width:100%; }
 
       .dib {
         display: inline-block;
       }
-      .w-30 {
-        width: 30%;
+      .df {
+        display: flex;
+      }
+      .flex-1 {
+        flex: 1;
+      }
+      .flex-none {
+        flex: 0;
       }
       .center {
         margin: 0 auto;
@@ -70,14 +85,15 @@ function previewTemplate (props) {
       .o-40 {
         opacity: .4;
       }
-
-      .screenshot {
-        /*position: absolute;*/
-        margin-bottom: 40px;
+      .w-100 {
+        width: 100%;
+      }
+      .pa2 {
+        padding: 1rem;
       }
 
-      .screenshot:first-child {
-        // opacity: 0.3;
+      .screenshot {
+        margin-bottom: 40px;
       }
 
       .icon {
@@ -88,6 +104,25 @@ function previewTemplate (props) {
       }
       .green {
         color: #19a974;
+      }
+
+      #original:not(:checked) ~ .screenshot-container .screenshot-label:nth-child(1) {
+        display: none;
+      }
+      #original:not(:checked) ~ .screenshot-container .screenshot:nth-child(1) {
+        display: none;
+      }
+      #new:not(:checked) ~ .screenshot-container .screenshot-label:nth-child(2) {
+        display: none;
+      }
+      #new:not(:checked) ~ .screenshot-container .screenshot:nth-child(2) {
+        display: none;
+      }
+      #diff:not(:checked) ~ .screenshot-container .screenshot-label:nth-child(3) {
+        display: none;
+      }
+      #diff:not(:checked) ~ .screenshot-container .screenshot:nth-child(3) {
+        display: none;
       }
     </style>
   </head>
@@ -102,10 +137,22 @@ function previewTemplate (props) {
       })}
     </div>
     <br />
-    <div>
-      <span class="w-30 dib o-40 tc b">ORIGINAL</span>
-      <span class="w-30 dib o-40 tc b">NEW</span>
-      <span class="w-30 dib o-40 tc b">DIFF</span>
+    <h4>Controls</h4>
+    <input id="original" type="checkbox" checked />
+    <label for="original">ORIGINAL</label>
+    &nbsp;
+    <input id="new" type="checkbox" checked />
+    <label for="new">NEW</label>
+    &nbsp;
+    <input id="diff" type="checkbox" checked />
+    <label for="diff">DIFF</label>
+    <br /><br /><br />
+    <div class="screenshot-container">
+      <div class="df">
+        <div class="screenshot-label flex-1 o-40 tc b">ORIGINAL</div>
+        <div class="screenshot-label flex-1 o-40 tc b">NEW</div>
+        <div class="screenshot-label flex-1 o-40 tc b">DIFF</div>
+      </div>
       ${props.files.map((file) => {
         return {
           pwd: props.pwd,

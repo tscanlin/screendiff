@@ -10,8 +10,8 @@ const previewTemplate = require('./preview.js').previewTemplate
 resemble.outputSettings({
   transparency: 0.5
 })
-const config = util.getDefaults({})
 
+const config = util.getDefaults({})
 const ALL_PNGS = '*.png'
 
 // TODO:

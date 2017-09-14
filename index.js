@@ -11,20 +11,22 @@ resemble.outputSettings({
   transparency: 0.5
 })
 
-const config = util.getDefaults({})
+const defaultConfig = util.getDefaults({})
 const ALL_PNGS = '*.png'
 
 // TODO:
 // Case of one new image
 // Fail cases
 
-function copyToOriginal () {
+function copyToOriginal (conf) {
+  const config = Object.assign({}, defaultConfig, conf)
   // Make the directory in case it doesn't exist.
   spawn('mkdir', [config.originalDir])
   spawn('cp', ['-R', `${config.newDir}/${ALL_PNGS}`, config.originalDir])
 }
 
-function diffFiles (file1, file2, diffFile) {
+function diffFiles (file1, file2, diffFile, conf) {
+  const config = Object.assign({}, defaultConfig, conf)
   return resemble(file1).compareTo(file2).onComplete(function (diffData) {
     if (diffData.misMatchPercentage !== '0.00' || config.forceDiff) {
       diffData.getDiffImage().pack().pipe(fs.createWriteStream(diffFile))
@@ -41,33 +43,27 @@ function diffFiles (file1, file2, diffFile) {
   })
 }
 
-function generateDiffs () {
+function generateDiffs (conf) {
+  const config = Object.assign({}, defaultConfig, conf)
   // Make the directory in case it doesn't exist.
   spawn('mkdir', [config.diffDir])
 
-  getScreenshots(config.originalDir).then((screenshots) => {
+  return getScreenshots(config.originalDir).then((screenshots) => {
     screenshots.forEach((file1) => {
-      // Read source
-      fs.readFile(file1, (err, data) => {
-        if (err) throw err
-        const file2 = file1.replace(config.originalDir, config.newDir)
-        const diffFile = file1.replace(config.originalDir, config.diffDir)
-        return diffFiles(file1, file2, diffFile)
-      })
+      const file2 = file1.replace(config.originalDir, config.newDir)
+      const diffFile = file1.replace(config.originalDir, config.diffDir)
+      return diffFiles(file1, file2, diffFile, config)
     })
   })
-
-  // getScreenshots(config.newDir).then((screenshots) => {
-  //   console.log(screenshots);
-  // })
 }
 
 function getScreenshots (dir) {
-  return globby(`${dir}/${ALL_PNGS}`)
+  return globby(`${dir}/**/${ALL_PNGS}`)
 }
 
-function validateJson () {
-  globby(`${config.diffDir}/*.json`).then((files) => {
+function validateJson (conf) {
+  const config = Object.assign({}, defaultConfig, conf)
+  return globby(`${config.diffDir}/*.json`).then((files) => {
     let failCount = 0
     let passCount = 0
     let failureArr = []
@@ -85,16 +81,21 @@ function validateJson () {
       }
     })
 
-    const verboseOutput = config.verboseOutput ? `\n\nFailures: ${JSON.stringify(failureArr, null, 2)}\n` : ''
+    const verboseOutput = config.verboseOutput && failCount > 0 ? `\n\nFailures: ${JSON.stringify(failureArr, null, 2)}\n` : ''
 
     console.log(`\nScreendiff Tests: ${failCount} failed, ${passCount} passed, ${files.length} total ${verboseOutput}`)
+
+    if (failCount > 0) {
+      process.exit(1)
+    }
   }).catch((e) => {
     console.error(e)
   })
 }
 
-function generatePreview () {
-  getScreenshots(config.originalDir).then((files) => {
+function generatePreview (conf) {
+  const config = Object.assign({}, defaultConfig, conf)
+  return getScreenshots(config.originalDir).then((files) => {
     const verboseOutput = {}
     files.forEach((file) => {
       const jsonFile = file.replace(config.originalDir, config.diffDir).replace('.png', '.json')

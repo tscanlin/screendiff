@@ -8,4 +8,5 @@ test('util.getDefaults', () => {
 
 test('index.generateDiffs', () => {
   index.generateDiffs()
+  expect(true).toBe(true)
 })

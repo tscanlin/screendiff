@@ -12,3 +12,5 @@ jspm_packages/
 
 screenshots/diff
 # screenshots/new
+screenshots-fail/diff
+# screenshots-fail/new

@@ -6,7 +6,10 @@
   "scripts": {
     "lint": "standard",
     "pretest": "yarn lint",
-    "test": "jest"
+    "screendiff:validate": "node ./cli.js validate",
+    "screendiff:update": "node ./cli.js update",
+    "screendiff:generate": "node ./cli.js generate",
+    "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",
@@ -36,6 +39,10 @@
   "standard": {
     "env": {
       "jest": true
-    }
+    },
+    "globals": [
+      "expect",
+      "test"
+    ]
   }
 }

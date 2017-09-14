@@ -1,36 +1,43 @@
 #!/usr/bin/env node
 
 const screendiff = require('./index.js')
+const util = require('./util.js')
 const argv = require('yargs')
   .usage('Usage: $0 <command> [options]').argv
 
-const defaultOptions = {}
-const options = Object.assign({}, defaultOptions, argv)
+const defaultConfig = util.getDefaults({})
 
-switch (options._[0]) {
+const configFile = argv.c || argv.config
+let configData = {}
+if (configFile) {
+  configData = require(configFile)
+}
+const config = Object.assign({}, defaultConfig, configData, argv)
+
+switch (config._[0]) {
   case 'generate:diffs':
   case 'gen:diffs':
-    screendiff.generateDiffs()
+    screendiff.generateDiffs(config)
     break
   case 'generate:preview':
   case 'gen:preview':
-    screendiff.generatePreview()
+    screendiff.generatePreview(config)
     break
   case 'generate':
-    screendiff.generateDiffs()
-    screendiff.generatePreview()
+    screendiff.generateDiffs(config)
+    screendiff.generatePreview(config)
     break
   case 'update':
-    screendiff.copyToOriginal()
+    screendiff.copyToOriginal(config)
     break
   case 'validate':
-    screendiff.validateJson()
+    screendiff.validateJson(config)
     break
   default:
     break
 }
 
-console.log(options);
+// console.log(config)
 
 // screendiff(options, (err, data) => {
 //   if (err) {

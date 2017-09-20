@@ -1,6 +1,6 @@
 # picdiff
 
-Picdiff is an image diffing tool, useful for screenshot diffing.
+Picdiff is an image diffing tool, useful for screenshot diffing. It is very flexible, simple, and unopinionated. I tried to keep it simple so dependencies are at a minimum. HTML is rendered with strings and the main dependency is [node-resemble-js](#).
 
 Features:
 

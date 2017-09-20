@@ -5,19 +5,19 @@
     "originalDir": {
       "type": "string",
       "description": "directory to keep the orignal reference screenshots to compare against",
-      "default": "screenshots/original",
+      "default": "picdiff/original",
       "required": true
     },
     "newDir": {
       "type": "string",
       "description": "directory for the new screenshots that are coming in",
-      "default": "screenshots/new",
+      "default": "picdiff/new",
       "required": true
     },
     "diffDir": {
       "type": "string",
       "description": "directory to store diff data",
-      "default": "screenshots/diff",
+      "default": "picdiff/diff",
       "required": true
     },
     "forceDiff": {

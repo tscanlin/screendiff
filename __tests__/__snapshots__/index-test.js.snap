@@ -2,10 +2,10 @@
 
 exports[`util.getDefaults 1`] = `
 Object {
-  "diffDir": "screenshots/diff",
+  "diffDir": "picdiff/diff",
   "forceDiff": false,
-  "newDir": "screenshots/new",
-  "originalDir": "screenshots/original",
+  "newDir": "picdiff/new",
+  "originalDir": "picdiff/original",
   "verboseOutput": true,
 }
 `;

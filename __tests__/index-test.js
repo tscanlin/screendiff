@@ -1,7 +1,7 @@
 const util = require('../util.js')
 const index = require('../index.js')
 
-const failConfig = require('../picdiff-fail.config.js')
+const failConfig = require('../picdiff-fail/config.js')
 
 test('util.getDefaults', () => {
   const defaults = util.getDefaults({})

@@ -1,32 +1,32 @@
 {
-  "name": "screendiff",
+  "name": "picdiff",
   "version": "1.0.0",
-  "description": "Screenshot diffing tool",
+  "description": "Image diffing tool, useful for screenshot diffing",
   "main": "index.js",
   "scripts": {
-    "lint": "standard",
+    "lint": "standard --fix",
     "pretest": "yarn lint",
-    "screendiff:validate": "node ./cli.js validate",
-    "screendiff:update": "node ./cli.js update",
-    "screendiff:generate": "node ./cli.js generate",
+    "picdiff:validate": "node ./cli.js validate",
+    "picdiff:update": "node ./cli.js update",
+    "picdiff:diff": "node ./cli.js diff",
     "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tscanlin/screendiff.git"
+    "url": "git+https://github.com/tscanlin/picdiff.git"
   },
   "keywords": [
     "screenshot",
     "diff",
     "diffing",
-    "screendiff"
+    "picdiff"
   ],
   "author": "Tim Scanlin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tscanlin/screendiff/issues"
+    "url": "https://github.com/tscanlin/picdiff/issues"
   },
-  "homepage": "https://github.com/tscanlin/screendiff#readme",
+  "homepage": "https://github.com/tscanlin/picdiff#readme",
   "dependencies": {
     "node-resemble-js": "^0.2.0",
     "yargs": "^8.0.2"
@@ -41,6 +41,7 @@
       "jest": true
     },
     "globals": [
+      "describe",
       "expect",
       "test"
     ]

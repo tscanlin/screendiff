@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const screendiff = require('./index.js')
+const picdiff = require('./index.js')
 const util = require('./util.js')
 const argv = require('yargs')
   .usage('Usage: $0 <command> [options]').argv
@@ -17,21 +17,23 @@ const config = Object.assign({}, defaultConfig, configData, argv)
 switch (config._[0]) {
   case 'generate:diffs':
   case 'gen:diffs':
-    screendiff.generateDiffs(config)
+    picdiff.generateDiffs(config)
     break
   case 'generate:preview':
   case 'gen:preview':
-    screendiff.generatePreview(config)
+    picdiff.generatePreview(config)
     break
+  case 'make':
+  case 'diff':
   case 'generate':
-    screendiff.generateDiffs(config)
-    screendiff.generatePreview(config)
+    picdiff.generateDiffs(config)
+    picdiff.generatePreview(config)
     break
   case 'update':
-    screendiff.copyToOriginal(config)
+    picdiff.copyToOriginal(config)
     break
   case 'validate':
-    screendiff.validateJson(config)
+    picdiff.validateJson(config)
     break
   default:
     break
@@ -39,7 +41,7 @@ switch (config._[0]) {
 
 // console.log(config)
 
-// screendiff(options, (err, data) => {
+// picdiff(options, (err, data) => {
 //   if (err) {
 //     process.stderr.write(JSON.stringify(err))
 //   }

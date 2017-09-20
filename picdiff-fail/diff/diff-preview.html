@@ -1,0 +1,141 @@
+
+<html>
+  <head>
+    <title>screendiff preview</title>
+    <style>
+      html { font-family: sans-serif; background-color: #fafcfd; margin-bottom: 50vh; }
+      a { text-decoration: none; }
+      img { max-width:100%; }
+
+      .dib {
+        display: inline-block;
+      }
+      .df {
+        display: flex;
+      }
+      .flex-1 {
+        flex: 1;
+      }
+      .flex-none {
+        flex: 0;
+      }
+      .center {
+        margin: 0 auto;
+      }
+      .tc {
+        text-align: center;
+      }
+      .b {
+        font-weight: bold;
+      }
+      .o-40 {
+        opacity: .4;
+      }
+      .w-100 {
+        width: 100%;
+      }
+      .pa2 {
+        padding: 1rem;
+      }
+
+      .screenshot {
+        margin-bottom: 40px;
+      }
+
+      .icon {
+        margin-right: 0.5em;
+      }
+      .red {
+        color: #ff4136;
+      }
+      .green {
+        color: #19a974;
+      }
+
+      #original:not(:checked) ~ .screenshot-container .screenshot-label:nth-child(1) {
+        display: none;
+      }
+      #original:not(:checked) ~ .screenshot-container .screenshot:nth-child(1) {
+        display: none;
+      }
+      #new:not(:checked) ~ .screenshot-container .screenshot-label:nth-child(2) {
+        display: none;
+      }
+      #new:not(:checked) ~ .screenshot-container .screenshot:nth-child(2) {
+        display: none;
+      }
+      #diff:not(:checked) ~ .screenshot-container .screenshot-label:nth-child(3) {
+        display: none;
+      }
+      #diff:not(:checked) ~ .screenshot-container .screenshot:nth-child(3) {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="margin: 30px 0;">Screendiff Preview</h1>
+    <div>
+      <h3>Screendiff Tests: <span class="red">1 failed</span>, <span class="green">1 passed</span>, 2 total</h3><pre style="display: none;">[
+  {
+    "diffFile": "screenshots/diff/tocbot.png",
+    "isSameDimensions": true,
+    "dimensionDifference": {
+      "width": 0,
+      "height": 0
+    },
+    "misMatchPercentage": "0.92",
+    "analysisTime": 448
+  }
+]</pre><div><a href="#tocbot-scroll"><span class="icon green">✔</span>tocbot-scroll</a></div><div><a href="#tocbot"><span class="icon red">✖</span>tocbot</a></div>
+    </div>
+    <br />
+    <h4>Controls</h4>
+    <input id="original" type="checkbox" checked />
+    <label for="original">ORIGINAL</label>
+    &nbsp;
+    <input id="new" type="checkbox" checked />
+    <label for="new">NEW</label>
+    &nbsp;
+    <input id="diff" type="checkbox" checked />
+    <label for="diff">DIFF</label>
+    <br /><br /><br />
+    <div class="screenshot-container">
+      <div class="df">
+        <div class="screenshot-label flex-1 o-40 tc b">ORIGINAL</div>
+        <div class="screenshot-label flex-1 o-40 tc b">NEW</div>
+        <div class="screenshot-label flex-1 o-40 tc b">DIFF</div>
+      </div>
+      
+  <div>
+    <h4 id="tocbot-scroll"><span class="icon green">✔</span>tocbot-scroll</h4>
+    <div class="df w-100">
+      <a href="file://D:\Code\screendiff\screenshots\original\tocbot-scroll.png" class="screenshot flex-1 pa2">
+        <img class="original" src="file://D:\Code\screendiff\screenshots\original\tocbot-scroll.png" />
+      </a>
+      <a href="file://D:\Code\screendiff\screenshots\new\tocbot-scroll.png" class="screenshot flex-1 pa2">
+        <img class="new" src="file://D:\Code\screendiff\screenshots\new\tocbot-scroll.png" />
+      </a>
+      <a href="file://D:\Code\screendiff\screenshots\diff\tocbot-scroll.png" class="screenshot flex-1 pa2">
+        <img class="diff" src="file://D:\Code\screendiff\screenshots\diff\tocbot-scroll.png" />
+      </a>
+    </div>
+  </div>
+  
+  <div>
+    <h4 id="tocbot"><span class="icon red">✖</span>tocbot</h4>
+    <div class="df w-100">
+      <a href="file://D:\Code\screendiff\screenshots\original\tocbot.png" class="screenshot flex-1 pa2">
+        <img class="original" src="file://D:\Code\screendiff\screenshots\original\tocbot.png" />
+      </a>
+      <a href="file://D:\Code\screendiff\screenshots\new\tocbot.png" class="screenshot flex-1 pa2">
+        <img class="new" src="file://D:\Code\screendiff\screenshots\new\tocbot.png" />
+      </a>
+      <a href="file://D:\Code\screendiff\screenshots\diff\tocbot.png" class="screenshot flex-1 pa2">
+        <img class="diff" src="file://D:\Code\screendiff\screenshots\diff\tocbot.png" />
+      </a>
+    </div>
+  </div>
+  
+    </div>
+  </body>
+</html>

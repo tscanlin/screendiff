@@ -47,7 +47,7 @@ function previewTemplate (props) {
       }
       return `<div><a href="#${getScreenshotName(file)}">${makeIcon({ good: props2.verboseOutput[file].misMatchPercentage === '0.00' })}${getScreenshotName(file)}</a></div>`
     }).join('')}`
-    const summary = `<h3>Screendiff Tests: <span class="red">${failCount} failed</span>, <span class="green">${passCount} passed</span>, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre>`
+    const summary = `<h3>picdiff Tests: <span class="red">${failCount} failed</span>, <span class="green">${passCount} passed</span>, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre>`
 
     return summary + html
   }
@@ -55,7 +55,7 @@ function previewTemplate (props) {
   return `
 <html>
   <head>
-    <title>screendiff preview</title>
+    <title>picdiff preview</title>
     <style>
       html { font-family: sans-serif; background-color: #fafcfd; margin-bottom: 50vh; }
       a { text-decoration: none; }
@@ -127,7 +127,7 @@ function previewTemplate (props) {
     </style>
   </head>
   <body>
-    <h1 style="margin: 30px 0;">Screendiff Preview</h1>
+    <h1 style="margin: 30px 0;">picdiff Preview</h1>
     <div>
       ${makeTocSummary({
         pwd: props.pwd,

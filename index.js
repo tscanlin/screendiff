@@ -83,10 +83,25 @@ function validateJson (conf) {
 
     const verboseOutput = config.verboseOutput && failCount > 0 ? `\n\nFailures: ${JSON.stringify(failureArr, null, 2)}\n` : ''
 
-    console.log(`\nScreendiff Tests: ${failCount} failed, ${passCount} passed, ${files.length} total ${verboseOutput}`)
+    const failText = failCount > 0 ? ` ${failCount} failed,` : ''
+    const summary = `\npicdiff Tests:${failText} ${passCount} passed, ${files.length} total`
 
-    if (failCount > 0) {
-      process.exit(1)
+    if (!config.isCli) {
+      console.log(`${summary} ${verboseOutput}`)
+    }
+
+    if (failCount > 0 && config.isCli) {
+      process.exit(1) // eslint-disable-line
+      // throw new Error(summary)
+    }
+
+    return {
+      passed: failCount === 0,
+      files,
+      passCount,
+      failCount,
+      failureArr,
+      config
     }
   }).catch((e) => {
     console.error(e)
@@ -111,8 +126,9 @@ function generatePreview (conf) {
 
     const previewFile = `${config.diffDir}/diff-preview.html`
     fs.writeFileSync(previewFile, html, 'utf-8')
+    return previewFile
   }).catch((e) => {
-    console.log(e)
+    console.error(e)
   })
 }
 

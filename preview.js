@@ -14,10 +14,12 @@ function previewTemplate (props) {
     const originalFile = `file://${path.join(props2.pwd, props2.file)}`
     const newFile = `file://${path.join(props2.pwd, props2.file.replace(props2.config.originalDir, props2.config.newDir))}`
     const diffFile = `file://${path.join(props2.pwd, props2.file.replace(props2.config.originalDir, props2.config.diffDir))}`
+    const file = props2.file
+    const misMatchPercentage = props2.verboseOutput && props2.verboseOutput[file] && props2.verboseOutput[file].misMatchPercentage
 
     return `
   <div>
-    <h4 id="${getScreenshotName(props2.file)}">${makeIcon({ good: props2.verboseOutput[props2.file].misMatchPercentage === '0.00' })}${getScreenshotName(props2.file)}</h4>
+    <h4 id="${getScreenshotName(props2.file)}">${makeIcon({ good: misMatchPercentage === '0.00' })}${getScreenshotName(props2.file)}</h4>
     <div class="df w-100">
       <a href="${originalFile}" class="screenshot flex-1 pa2">
         <img class="original" src="${originalFile}" />
@@ -38,14 +40,15 @@ function previewTemplate (props) {
     let passCount = 0
     let verboseOutput = []
     let html = `${props2.files.map((file) => {
+      const misMatchPercentage = props2.verboseOutput && props2.verboseOutput[file] && props2.verboseOutput[file].misMatchPercentage
       console.log(file)
-      if (props2.verboseOutput[file].misMatchPercentage !== '0.00') {
+      if (misMatchPercentage !== '0.00') {
         failCount++
         verboseOutput.push(props2.verboseOutput[file])
       } else {
         passCount++
       }
-      return `<div><a href="#${getScreenshotName(file)}">${makeIcon({ good: props2.verboseOutput[file].misMatchPercentage === '0.00' })}${getScreenshotName(file)}</a></div>`
+      return `<div><a href="#${getScreenshotName(file)}">${makeIcon({ good: misMatchPercentage === '0.00' })}${getScreenshotName(file)}</a></div>`
     }).join('')}`
     const summary = `<h3>picdiff Tests: <span class="red">${failCount} failed</span>, <span class="green">${passCount} passed</span>, ${props2.files.length} total</h3><pre style="display: none;">${JSON.stringify(verboseOutput, null, 2)}</pre>`
 

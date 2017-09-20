@@ -10,7 +10,7 @@ node_modules/
 jspm_packages/
 
 
-screenshots/diff
-# screenshots/new
-screenshots-fail/diff
-# screenshots-fail/new
+picdiff/diff
+# picdiff/new
+picdiff-fail/diff
+# picdiff-fail/new

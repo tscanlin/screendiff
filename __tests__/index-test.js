@@ -10,7 +10,9 @@ test('util.getDefaults', () => {
 
 describe('pass', () => {
   test('index.generateDiffs', () => {
-    expect(() => { index.generateDiffs() }).not.toThrow()
+    index.generateDiffs()
+    expect(() => {
+    }).not.toThrow()
   })
 
   test('index.validateJson', (done) => {
@@ -25,7 +27,9 @@ describe('pass', () => {
 
 describe('fail', () => {
   test('index.generateDiffs', () => {
-    expect(() => { index.generateDiffs(failConfig) }).not.toThrow()
+    expect(() => {
+      index.generateDiffs(failConfig)
+    }).not.toThrow()
   })
 
   test('index.validateJson', (done) => {

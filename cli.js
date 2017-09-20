@@ -11,6 +11,7 @@ const configFile = argv.c || argv.config
 let configData = {}
 if (configFile) {
   configData = require(configFile)
+  console.log(configData)
 }
 const config = Object.assign({}, defaultConfig, configData, argv)
 
@@ -26,14 +27,18 @@ switch (config._[0]) {
   case 'make':
   case 'diff':
   case 'generate':
-    picdiff.generateDiffs(config)
-    picdiff.generatePreview(config)
+    picdiff.generateDiffs(config).then(() => {
+      return picdiff.generatePreview(config)
+    })
     break
   case 'update':
     picdiff.copyToOriginal(config)
     break
   case 'validate':
     picdiff.validateJson(config)
+    break
+  case 'clean':
+    picdiff.cleanDir(config)
     break
   default:
     break

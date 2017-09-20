@@ -1,8 +1,10 @@
 const globby = require('globby')
 const resemble = require('node-resemble-js')
 const fs = require('fs')
+const path = require('path')
 const spawn = require('child_process').spawnSync
 const PWD = process.env.PWD || process.cwd()
+const packageRoot = path.resolve('.')
 
 const util = require('./util.js')
 const previewTemplate = require('./preview.js').previewTemplate
@@ -16,43 +18,62 @@ const ALL_PNGS = '*.png'
 
 // TODO:
 // Case of one new image
-// Fail cases
+
+function cleanDir (conf) {
+  const config = Object.assign({}, defaultConfig, conf)
+  // Make the directory in case it doesn't exist.
+  // spawn('mkdir', [config.originalDir])
+  spawn('rm', ['-rf', path.join(packageRoot, config.baseDir, config.diffDir)])
+}
 
 function copyToOriginal (conf) {
   const config = Object.assign({}, defaultConfig, conf)
   // Make the directory in case it doesn't exist.
-  spawn('mkdir', [config.originalDir])
-  spawn('cp', ['-R', `${config.newDir}/${ALL_PNGS}`, config.originalDir])
+  spawn('mkdir', [path.join(packageRoot, config.baseDir, config.originalDir)])
+  spawn('cp', ['-R', `${path.join(packageRoot, config.baseDir, config.newDir)}/${ALL_PNGS}`, path.join(packageRoot, config.baseDir, config.originalDir)])
 }
 
-function diffFiles (file1, file2, diffFile, conf) {
+function diffFiles (file1, file2, diffFile, conf, cb) {
   const config = Object.assign({}, defaultConfig, conf)
   return resemble(file1).compareTo(file2).onComplete(function (diffData) {
-    if (diffData.misMatchPercentage !== '0.00' || config.forceDiff) {
+    if (diffData && (diffData.misMatchPercentage !== '0.00' || config.forceDiff)) {
       diffData.getDiffImage().pack().pipe(fs.createWriteStream(diffFile))
     }
 
-    // Write summary json file.
-    fs.writeFileSync(diffFile.split('.png').join('.json'), JSON.stringify({
+    const diffJson = {
       diffFile: diffFile,
       isSameDimensions: diffData.isSameDimensions,
       dimensionDifference: diffData.dimensionDifference,
       misMatchPercentage: diffData.misMatchPercentage,
       analysisTime: diffData.analysisTime
-    }))
+    }
+    console.log(diffJson)
+
+    // Write summary json file.
+    fs.writeFileSync(diffFile.split('.png').join('.json'), JSON.stringify(diffJson))
+
+    cb(null, diffJson)
   })
 }
 
 function generateDiffs (conf) {
   const config = Object.assign({}, defaultConfig, conf)
+  console.log('GEN', config)
   // Make the directory in case it doesn't exist.
-  spawn('mkdir', [config.diffDir])
+  spawn('mkdir', [path.join(packageRoot, config.baseDir, config.diffDir)])
 
-  return getScreenshots(config.originalDir).then((screenshots) => {
+  return getScreenshots(path.join(packageRoot, config.baseDir, config.originalDir)).then((screenshots) => {
+    console.log('SS', screenshots)
+    let resolved = 0
     screenshots.forEach((file1) => {
       const file2 = file1.replace(config.originalDir, config.newDir)
       const diffFile = file1.replace(config.originalDir, config.diffDir)
-      return diffFiles(file1, file2, diffFile, config)
+      diffFiles(file1, file2, diffFile, config, () => {
+        resolved++
+        if (resolved === screenshots.length - 1) {
+          return Promise.resolve(resolved)
+        }
+      })
     })
   })
 }
@@ -63,13 +84,13 @@ function getScreenshots (dir) {
 
 function validateJson (conf) {
   const config = Object.assign({}, defaultConfig, conf)
-  return globby(`${config.diffDir}/*.json`).then((files) => {
+  return globby(`${path.join(packageRoot, config.baseDir, config.diffDir)}/*.json`).then((files) => {
     let failCount = 0
     let passCount = 0
     let failureArr = []
 
     files.forEach((file) => {
-      const json = require(`./${file}`)
+      const json = require(file)
       if (!json || json.misMatchPercentage !== '0.00') {
         failCount++
         if (json.isSameDimensions) {
@@ -110,11 +131,16 @@ function validateJson (conf) {
 
 function generatePreview (conf) {
   const config = Object.assign({}, defaultConfig, conf)
-  return getScreenshots(config.originalDir).then((files) => {
+  return getScreenshots(path.join(packageRoot, config.baseDir, config.originalDir)).then((files) => {
     const verboseOutput = {}
     files.forEach((file) => {
       const jsonFile = file.replace(config.originalDir, config.diffDir).replace('.png', '.json')
-      verboseOutput[file] = require(`./${jsonFile}`)
+      // Fails on the first try, but not that important for now since its extra output.
+      try {
+        verboseOutput[file] = require(path.join(packageRoot, config.baseDir, jsonFile))
+      } catch (e) {
+        console.log(e)
+      }
     })
 
     const html = previewTemplate({
@@ -124,7 +150,7 @@ function generatePreview (conf) {
       config
     })
 
-    const previewFile = `${config.diffDir}/diff-preview.html`
+    const previewFile = `${path.join(packageRoot, config.baseDir, config.diffDir)}/diff-preview.html`
     fs.writeFileSync(previewFile, html, 'utf-8')
     return previewFile
   }).catch((e) => {
@@ -133,6 +159,7 @@ function generatePreview (conf) {
 }
 
 module.exports = {
+  cleanDir: cleanDir,
   copyToOriginal: copyToOriginal,
   diffFiles: diffFiles,
   generateDiffs: generateDiffs,

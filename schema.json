@@ -2,22 +2,28 @@
   "description": "Api schema",
   "type": "object",
   "properties": {
+    "baseDir": {
+      "type": "string",
+      "description": "directory to hold the config file and other directories",
+      "default": "picdiff",
+      "required": true
+    },
     "originalDir": {
       "type": "string",
       "description": "directory to keep the orignal reference screenshots to compare against",
-      "default": "picdiff/original",
+      "default": "original",
       "required": true
     },
     "newDir": {
       "type": "string",
       "description": "directory for the new screenshots that are coming in",
-      "default": "picdiff/new",
+      "default": "new",
       "required": true
     },
     "diffDir": {
       "type": "string",
       "description": "directory to store diff data",
-      "default": "picdiff/diff",
+      "default": "diff",
       "required": true
     },
     "forceDiff": {

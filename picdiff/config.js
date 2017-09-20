@@ -1,5 +1,6 @@
 module.exports = {
-  originalDir: 'picdiff/orignal',
-  newDir: 'picdiff/new',
-  diffDir: 'picdiff/diff'
+  baseDir: 'picdiff',
+  originalDir: 'orignal',
+  newDir: 'new',
+  diffDir: 'diff'
 }

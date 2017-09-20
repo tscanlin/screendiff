@@ -9,6 +9,7 @@
     "picdiff:validate": "node ./cli.js validate",
     "picdiff:update": "node ./cli.js update",
     "picdiff:diff": "node ./cli.js diff",
+    "picdiff:clean": "node ./cli.js clean",
     "test": "jest --forceExit"
   },
   "repository": {

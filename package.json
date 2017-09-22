@@ -29,7 +29,9 @@
   },
   "homepage": "https://github.com/tscanlin/picdiff#readme",
   "dependencies": {
-    "node-resemble-js": "^0.2.0",
+    "pixelmatch": "^4.0.2",
+    "pngjs": "^3.3.0",
+    "resemblejs": "^2.2.6",
     "yargs": "^8.0.2"
   },
   "devDependencies": {

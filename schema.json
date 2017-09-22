@@ -1,39 +1,44 @@
 {
-  "description": "Api schema",
+  "description": "Api schema.",
   "type": "object",
   "properties": {
     "baseDir": {
       "type": "string",
-      "description": "directory to hold the config file and other directories",
+      "description": "directory to hold the config file and other directories.",
       "default": "picdiff",
       "required": true
     },
     "originalDir": {
       "type": "string",
-      "description": "directory to keep the orignal reference screenshots to compare against",
+      "description": "directory to keep the orignal reference screenshots to compare against.",
       "default": "original",
       "required": true
     },
     "newDir": {
       "type": "string",
-      "description": "directory for the new screenshots that are coming in",
+      "description": "directory for the new screenshots that are coming in.",
       "default": "new",
       "required": true
     },
     "diffDir": {
       "type": "string",
-      "description": "directory to store diff data",
+      "description": "directory to store diff data.",
       "default": "diff",
       "required": true
     },
+    "resultsFile": {
+      "type": "string",
+      "description": "JSON file to write diff data to.",
+      "default": "results.json"
+    },
     "forceDiff": {
       "type": "boolean",
-      "description": "Whether to force the image diff file to be written",
+      "description": "Whether to force the image diff file to be written.",
       "default": false
     },
     "verboseOutput": {
       "type": "boolean",
-      "description": "Whether to force the image diff file to be written",
+      "description": "Whether to force the image diff file to be written.",
       "default": true
     }
   }

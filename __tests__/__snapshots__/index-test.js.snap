@@ -2,10 +2,12 @@
 
 exports[`util.getDefaults 1`] = `
 Object {
-  "diffDir": "picdiff/diff",
+  "baseDir": "picdiff",
+  "diffDir": "diff",
   "forceDiff": false,
-  "newDir": "picdiff/new",
-  "originalDir": "picdiff/original",
+  "newDir": "new",
+  "originalDir": "original",
+  "resultsFile": "results.json",
   "verboseOutput": true,
 }
 `;

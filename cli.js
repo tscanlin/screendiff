@@ -7,13 +7,7 @@ const argv = require('yargs')
 
 const defaultConfig = util.getDefaults({})
 
-const configFile = argv.c || argv.config
-let configData = {}
-if (configFile) {
-  configData = require(configFile)
-  console.log(configData)
-}
-const config = Object.assign({}, defaultConfig, configData, argv)
+const config = Object.assign({}, defaultConfig, argv)
 
 switch (config._[0]) {
   case 'generate:diffs':

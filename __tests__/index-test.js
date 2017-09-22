@@ -9,34 +9,41 @@ test('util.getDefaults', () => {
 })
 
 describe('pass', () => {
-  test('index.generateDiffs', () => {
-    index.generateDiffs()
-    expect(() => {
-    }).not.toThrow()
+  test('index.generateDiffs', (done) => {
+    index.generateDiffs({}).then((data) => {
+      // console.log(data)
+      done()
+    })
+    // expect(() => {
+    // }).not.toThrow()
   })
 
   test('index.validateJson', (done) => {
     index.validateJson().then((data) => {
-      expect(data.passCount).toBe(2)
-      expect(data.failCount).toBe(0)
-      expect(data.passed).toBe(true)
+      expect(data.passed).toBe(2)
+      expect(data.failed).toBe(0)
+      expect(data.succeded).toBe(true)
       done()
     })
   })
 })
 
 describe('fail', () => {
-  test('index.generateDiffs', () => {
-    expect(() => {
-      index.generateDiffs(failConfig)
-    }).not.toThrow()
+  test('index.generateDiffs', (done) => {
+    console.log(failConfig)
+    index.generateDiffs(failConfig).then((data) => {
+      // console.log(data)
+      done()
+    })
+    // expect(() => {
+    // }).not.toThrow()
   })
 
   test('index.validateJson', (done) => {
     index.validateJson(failConfig).then((data) => {
-      expect(data.passCount).toBe(1)
-      expect(data.failCount).toBe(1)
-      expect(data.passed).toBe(false)
+      expect(data.passed).toBe(1)
+      expect(data.failed).toBe(1)
+      expect(data.succeded).toBe(false)
       done()
     })
   })

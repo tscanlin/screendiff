@@ -13,13 +13,14 @@ const previewTemplate = require('./preview.js').previewTemplate
 const defaultConfig = util.getDefaults({})
 
 function getConfig (conf) {
-  let config = Object.assign({}, defaultConfig, conf)
-  try {
-    const configData = require(path.join(packageRoot, config.baseDir, config.configFile))
-    config = Object.assign({}, config, configData)
-  } catch (e) {
-    console.log(e)
-  }
+  const configData = require(path.join(packageRoot, conf.baseDir, conf.configFile))
+  let config = Object.assign({}, defaultConfig, conf, configData)
+  // console.log(path.join(packageRoot, config.baseDir, config.configFile))
+  // config = Object.assign(config, configData)
+  // try {
+  // } catch (e) {
+  //   console.log(e)
+  // }
   return config
 }
 
@@ -59,7 +60,7 @@ function diffFiles (file1, file2, diffFile, conf, cb) {
     res.pixelDiffCount = pixelDiffCount
     res.width = img1.width
     res.height = img1.height
-    res.misMatchPercentage = pixelDiffCount / (img1.width * img1.height)
+    res.misMatchPercentage = (pixelDiffCount / (img1.width * img1.height)) * 100
 
     cb(null, res)
   }
@@ -72,9 +73,7 @@ function generateDiffs (conf) {
   return getScreenshots(path.join(packageRoot, config.baseDir, config.originalDir)).then((screenshots) => {
     const diffMap = {}
     let resolved = 0
-    console.log(resolved)
     return new Promise(function (resolve) {
-      console.log(screenshots)
       screenshots.forEach((file1) => {
         const file2 = file1.replace(config.originalDir, config.newDir)
         const diffFile = file1.replace(config.originalDir, config.diffDir)
@@ -87,7 +86,7 @@ function generateDiffs (conf) {
               total: resolved,
               diffMap: diffMap
             })
-            console.log(results)
+
             const resultsFile = path.join(packageRoot, config.baseDir, config.diffDir, config.resultsFile)
             fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2), 'utf-8')
             return resolve(results)
@@ -124,7 +123,6 @@ function validateJson (conf) {
 
   const resultsFile = path.join(packageRoot, config.baseDir, config.diffDir, config.resultsFile)
   const results = require(resultsFile)
-  console.log(results)
 
   const verboseOutput = config.verboseOutput && results.failed > 0 ? `\n\nFailures: ${JSON.stringify(results, null, 2)}\n` : ''
 
@@ -136,14 +134,15 @@ function validateJson (conf) {
   }
 
   if (results.failed > 0 && config.isCli) {
-    process.exit(1) // eslint-disable-line
-    // throw new Error(summary)
+    // process.exit(1) // eslint-disable-line
+    throw new Error(summary)
   }
 
   return {
     succeded: results.failed === 0,
     passed: results.passed,
     failed: results.failed,
+    total: results.total,
     config
   }
 }

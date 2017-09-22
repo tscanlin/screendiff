@@ -1,4 +1,4 @@
-module.exports = {
+exports.config = {
   baseDir: 'picdiff',
   originalDir: 'orignal',
   newDir: 'new',

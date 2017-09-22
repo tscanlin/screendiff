@@ -41,7 +41,6 @@ function previewTemplate (props) {
     let verboseOutput = []
     let html = `${props2.files.map((file) => {
       const misMatchPercentage = props2.verboseOutput && props2.verboseOutput[file] && props2.verboseOutput[file].misMatchPercentage
-      console.log(file)
       if (misMatchPercentage !== '0.00') {
         failCount++
         verboseOutput.push(props2.verboseOutput[file])

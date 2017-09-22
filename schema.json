@@ -46,6 +46,11 @@
       "description": "Whether to force the image diff file to be written.",
       "default": false
     },
+    "stdout": {
+      "type": "boolean",
+      "description": "Whether to wite cli output to stdout.",
+      "default": true
+    },
     "verboseOutput": {
       "type": "boolean",
       "description": "Whether to force the image diff file to be written.",

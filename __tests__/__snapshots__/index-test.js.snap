@@ -10,6 +10,7 @@ Object {
   "originalDir": "original",
   "previewHtmlFile": "diff-preview.html",
   "resultsFile": "results.json",
+  "stdout": true,
   "verboseOutput": true,
 }
 `;

@@ -3,10 +3,12 @@
 exports[`util.getDefaults 1`] = `
 Object {
   "baseDir": "picdiff",
+  "configFile": "config.js",
   "diffDir": "diff",
   "forceDiff": false,
   "newDir": "new",
   "originalDir": "original",
+  "previewHtmlFile": "diff-preview.html",
   "resultsFile": "results.json",
   "verboseOutput": true,
 }

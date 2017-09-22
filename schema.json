@@ -31,6 +31,16 @@
       "description": "JSON file to write diff data to.",
       "default": "results.json"
     },
+    "configFile": {
+      "type": "string",
+      "description": "Config file to get configuration from.",
+      "default": "config.js"
+    },
+    "previewHtmlFile": {
+      "type": "string",
+      "description": "Config file to get configuration from.",
+      "default": "diff-preview.html"
+    },
     "forceDiff": {
       "type": "boolean",
       "description": "Whether to force the image diff file to be written.",

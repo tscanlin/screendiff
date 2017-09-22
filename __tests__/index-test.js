@@ -1,7 +1,10 @@
 const util = require('../util.js')
-const index = require('../index.js')
+const spawn = require('child_process').spawnSync
+const globby = require('globby')
 
-const failConfig = require('../picdiff-fail/config.js')
+const picdiffConfig = require('../picdiff/config.js')
+const picdiffFailConfig = require('../picdiff-fail/config.js')
+// const failConfig = require('../picdiff-fail/config.js')
 
 test('util.getDefaults', () => {
   const defaults = util.getDefaults({})
@@ -9,42 +12,53 @@ test('util.getDefaults', () => {
 })
 
 describe('pass', () => {
-  test('index.generateDiffs', (done) => {
-    index.generateDiffs({}).then((data) => {
-      // console.log(data)
+  test('diff', (done) => {
+    spawn('node', ['./cli.js', 'clean'])
+    spawn('node', ['./cli.js', 'diff'])
+    globby(`./${picdiffConfig.baseDir}/${picdiffConfig.diffDir}/*`).then((files) => {
+      expect(files.length).toBe(4)
       done()
     })
-    // expect(() => {
-    // }).not.toThrow()
   })
 
-  test('index.validateJson', (done) => {
-    index.validateJson().then((data) => {
-      expect(data.passed).toBe(2)
-      expect(data.failed).toBe(0)
-      expect(data.succeded).toBe(true)
+  test('clean', (done) => {
+    spawn('node', ['./cli.js', 'clean'])
+    globby(`./${picdiffConfig.baseDir}/${picdiffConfig.diffDir}/*`).then((files) => {
+      expect(files.length).toBe(0)
       done()
     })
+  })
+
+  test('validate', (done) => {
+    spawn('node', ['./cli.js', 'diff'])
+    const res = spawn('node', ['./cli.js', 'validate'])
+    expect(res.status).toBe(0)
+    done()
   })
 })
 
 describe('fail', () => {
-  test('index.generateDiffs', (done) => {
-    console.log(failConfig)
-    index.generateDiffs(failConfig).then((data) => {
-      // console.log(data)
+  test('diff', (done) => {
+    spawn('node', ['./cli.js', 'clean', '--baseDir', 'picdiff-fail'])
+    spawn('node', ['./cli.js', 'diff', '--baseDir', 'picdiff-fail'])
+    globby(`./${picdiffFailConfig.baseDir}/${picdiffFailConfig.diffDir}/*`).then((files) => {
+      expect(files.length).toBe(4)
       done()
     })
-    // expect(() => {
-    // }).not.toThrow()
   })
 
-  test('index.validateJson', (done) => {
-    index.validateJson(failConfig).then((data) => {
-      expect(data.passed).toBe(1)
-      expect(data.failed).toBe(1)
-      expect(data.succeded).toBe(false)
+  test('clean', (done) => {
+    spawn('node', ['./cli.js', 'clean', '--baseDir', 'picdiff-fail'])
+    globby(`./${picdiffFailConfig.baseDir}/${picdiffFailConfig.diffDir}/*`).then((files) => {
+      expect(files.length).toBe(0)
       done()
     })
+  })
+
+  test('validate', (done) => {
+    spawn('node', ['./cli.js', 'diff', '--baseDir', 'picdiff-fail'])
+    const res = spawn('node', ['./cli.js', 'validate', '--baseDir', 'picdiff-fail'])
+    expect(res.status).toBe(1)
+    done()
   })
 })

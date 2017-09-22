@@ -14,10 +14,11 @@ const defaultConfig = util.getDefaults({})
 
 function getConfig (conf) {
   let config = Object.assign({}, defaultConfig, conf)
-  const configFile = config.c || config.config
-  if (configFile) {
-    const configData = require(configFile)
+  try {
+    const configData = require(path.join(packageRoot, config.baseDir, config.configFile))
     config = Object.assign({}, config, configData)
+  } catch (e) {
+    console.log(e)
   }
   return config
 }
@@ -62,54 +63,36 @@ function diffFiles (file1, file2, diffFile, conf, cb) {
 
     cb(null, res)
   }
-
-  // return resemble(file1).compareTo(file2).onComplete(function (diffData) {
-  //   console.log('RESEMBLE')
-  //   if (diffData && (diffData.misMatchPercentage !== '0.00' || config.forceDiff)) {
-  //     diffData.getDiffImage().pack().pipe(fs.createWriteStream(diffFile))
-  //   }
-  //
-  //   const diffJson = {
-  //     diffFile: diffFile,
-  //     isSameDimensions: diffData.isSameDimensions,
-  //     dimensionDifference: diffData.dimensionDifference,
-  //     misMatchPercentage: diffData.misMatchPercentage,
-  //     analysisTime: diffData.analysisTime
-  //   }
-  //   console.log(diffFile.split('.png').join('.json'))
-  //
-  //   // Write summary json file.
-  //   fs.writeFileSync(diffFile.split('.png').join('.json'), JSON.stringify(diffJson))
-  //
-  // })
 }
 
 function generateDiffs (conf) {
   const config = getConfig(conf)
-  console.log('GEN', config)
   // Make the directory in case it doesn't exist.
   spawn('mkdir', [path.join(packageRoot, config.baseDir, config.diffDir)])
-
   return getScreenshots(path.join(packageRoot, config.baseDir, config.originalDir)).then((screenshots) => {
-    console.log('SS', screenshots)
     const diffMap = {}
     let resolved = 0
-    screenshots.forEach((file1) => {
-      const file2 = file1.replace(config.originalDir, config.newDir)
-      const diffFile = file1.replace(config.originalDir, config.diffDir)
-      diffFiles(file1, file2, diffFile, config, (err, res) => {
-        if (err) throw err
-        resolved++
-        diffMap[diffFile] = res
-        if (resolved === screenshots.length) {
-          const results = summarizeResults({
-            total: resolved,
-            diffMap: diffMap
-          })
-          const resultsFile = path.join(packageRoot, config.baseDir, config.diffDir, config.resultsFile)
-          fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2), 'utf-8')
-          return Promise.resolve(results)
-        }
+    console.log(resolved)
+    return new Promise(function (resolve) {
+      console.log(screenshots)
+      screenshots.forEach((file1) => {
+        const file2 = file1.replace(config.originalDir, config.newDir)
+        const diffFile = file1.replace(config.originalDir, config.diffDir)
+        diffFiles(file1, file2, diffFile, config, (err, res) => {
+          if (err) throw err
+          resolved++
+          diffMap[diffFile] = res
+          if (resolved === screenshots.length) {
+            const results = summarizeResults({
+              total: resolved,
+              diffMap: diffMap
+            })
+            console.log(results)
+            const resultsFile = path.join(packageRoot, config.baseDir, config.diffDir, config.resultsFile)
+            fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2), 'utf-8')
+            return resolve(results)
+          }
+        })
       })
     })
   })
@@ -177,7 +160,7 @@ function generatePreview (conf) {
       config
     })
 
-    const previewFile = `${path.join(packageRoot, config.baseDir, config.diffDir)}/diff-preview.html`
+    const previewFile = `${path.join(packageRoot, config.baseDir, config.diffDir)}/${config.previewHtmlFile}`
     fs.writeFileSync(previewFile, html, 'utf-8')
     return previewFile
   }).catch((e) => {

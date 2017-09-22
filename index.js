@@ -47,7 +47,6 @@ function diffFiles (file1, file2, diffFile, conf, cb) {
       misMatchPercentage: diffData.misMatchPercentage,
       analysisTime: diffData.analysisTime
     }
-    console.log(diffJson)
 
     // Write summary json file.
     fs.writeFileSync(diffFile.split('.png').join('.json'), JSON.stringify(diffJson))
@@ -79,7 +78,7 @@ function generateDiffs (conf) {
 }
 
 function getScreenshots (dir) {
-  return globby(`${dir}/**/${ALL_PNGS}`)
+  return globby(path.join(dir, '**', ALL_PNGS))
 }
 
 function validateJson (conf) {
